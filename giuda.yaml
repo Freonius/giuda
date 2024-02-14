@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=./giuda.schema.json
 
 name: Federico Pirani
-image: null
+image: 'Yacht_High'
 phone:
   number: 123-456-7890
   prefix: 39
@@ -32,15 +32,15 @@ side_section:
 
 experiences:
   - role: 'Software Engineer'
-    company: ''
-    date: ''
-    location: ''
+    company: 'My Company'
+    date: '2020-2021'
+    location: 'Milano, IT'
     items:
+      - 'Did this and that'
       - title: 'DevOps'
         items:
           - 'Did this and that'
         description: 'Here is the section where I tell you what I did as a DevOps guy.'
-      - 'Did this and that'
       - title: 'PHP'
         items:
           - 'Did this and that in PHP'

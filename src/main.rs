@@ -430,15 +430,15 @@ fn get_class() -> String {
 
 \newenvironment{cvcolumn}[1]{\begin{minipage}[t]{#1}\raggedright}{\end{minipage}}
 
-\RequirePackage[backend=biber,style=authoryear,sorting=ydnt]{biblatex}
+%\RequirePackage[backend=biber,style=authoryear,sorting=ydnt]{biblatex}
 %% For removing numbering entirely when using a numeric style
 % \setlength{\bibhang}{1em}
 % \DeclareFieldFormat{labelnumberwidth}{\makebox[\bibhang][l]{\itemmarker}}
 % \setlength{\biblabelsep}{0pt}
-\defbibheading{pubtype}{\cvsubsection{#1}}
-\renewcommand{\bibsetup}{\vspace*{-\baselineskip}}
-\AtEveryBibitem{\makebox[\bibhang][l]{\itemmarker}}
-\setlength{\bibitemsep}{0.25\baselineskip}
+%\defbibheading{pubtype}{\cvsubsection{#1}}
+%\renewcommand{\bibsetup}{\vspace*{-\baselineskip}}
+%\AtEveryBibitem{\makebox[\bibhang][l]{\itemmarker}}
+%\setlength{\bibitemsep}{0.25\baselineskip}
 
 % v1.1.2: make it easier to add a sidebar aligned with top of next page
 \RequirePackage{afterpage}
@@ -520,6 +520,7 @@ fn get_experiences(yaml: &Yaml) -> String {
         experiences.push_str(&get_experience_items(doc["items"].as_vec().unwrap()));
         experiences.push_str("\n\\divider\n\n");
     });
+    experiences = experiences.trim_end_matches("\\divider\n\n").to_string();
     return experiences;
 }
 
@@ -740,10 +741,11 @@ fn get_projects(yaml: &Yaml) -> String {
                 url = format!("\\href{{{}}}{{{}}}\n\n", addr, addr);
             }
             out.push_str(&format!(
-                "\\cvevent{{{}}}{{{}}}{{{}}}{{}}\n{}{}\n\n",
+                "\\cvevent{{{}}}{{{}}}{{{}}}{{}}\n{}{}\n\\divider\n",
                 name, title, date, url, description
             ));
         });
+    out = out.trim_end_matches("\\divider\n").to_string();
     return out;
 }
 
@@ -763,7 +765,7 @@ fn get_section(yaml: &Vec<Yaml>, full: &Yaml) -> String {
         out.push_str(&format!("\\cvsection{{{}}}\n", escape_latex(&title)));
         if doc["description"].as_str().is_some() {
             out.push_str(&format!(
-                "{}\n",
+                "{}\n\\medskip\n",
                 escape_latex(&doc["description"].as_str().unwrap().to_string())
             ));
         }
@@ -876,6 +878,8 @@ fn load_file(file: &str) -> String {
             "\\tagline{{{}}}\n",
             escape_latex(&yaml["role"].as_str().unwrap().to_string())
         ));
+    } else {
+        out.push_str("\\tagline{}\n");
     }
     if yaml["image"].as_str().is_some() {
         out.push_str(&format!(
