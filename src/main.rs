@@ -115,6 +115,67 @@ fn get_about(yaml: &Yaml) -> String {
     return out;
 }
 
+fn get_hero(yaml: &Yaml) -> String {
+    let mut out: String = String::new();
+    yaml["hero"]
+        .as_vec()
+        .unwrap()
+        .iter()
+        .for_each(|doc: &Yaml| {
+            let doc: &Yaml = doc;
+            let title: String = doc["title"].as_str().unwrap().to_string();
+            let description: String = doc["description"].as_str().unwrap().to_string();
+            let icon: String = doc["icon"].as_str().unwrap().to_string();
+            out.push_str(&format!(
+                "\n\\cvachievement{{\\fa{}}}{{{}}}{{{}}}\n\\divider\n",
+                icon,
+                escape_latex(&title),
+                escape_latex(&description)
+            ));
+        });
+    out = out.trim_end_matches("\n\\divider\n").to_string();
+    out.push_str("\n\n");
+    return out;
+}
+
+fn get_skill_item(item: &Yaml) -> String {
+    let title: String = item["title"].as_str().unwrap().to_string();
+    let level: String = item["level"].as_i64().unwrap().to_string();
+    return format!("\\cvskill{{{}}}{{{}}}\n", escape_latex(&title), level);
+}
+
+fn get_skills(yaml: &Yaml) -> String {
+    let mut out: String = String::new();
+    yaml["skills"]
+        .as_vec()
+        .unwrap()
+        .iter()
+        .for_each(|doc: &Yaml| {
+            let doc: &Yaml = doc;
+            if doc["title"].as_str().is_some() {
+                out.push_str(&format!("{}\\smallskip\n", get_skill_item(doc)));
+            } else {
+                out = out.trim_end_matches("\\smallskip\n").to_string();
+                out = out.trim_end_matches("\\divider\n").to_string();
+                out.push_str("\\divider\n");
+                doc["skills"]
+                    .as_vec()
+                    .unwrap()
+                    .iter()
+                    .for_each(|item: &Yaml| {
+                        out.push_str(&format!("{}\\smallskip\n", get_skill_item(item)));
+                    });
+                out = out.trim_end_matches("\\smallskip\n").to_string();
+                out.push_str("\\divider\n");
+            }
+        });
+    out = out.trim_end_matches("\\smallskip\n").to_string();
+    out = out.trim_end_matches("\\divider\n").to_string();
+    out = out.trim_start_matches("\\divider\n").to_string();
+    out.push_str("\\medskip\n");
+    return out;
+}
+
 fn escape_latex(text: &String) -> String {
     return text
         .replace("\\", "\\\\")
@@ -129,13 +190,25 @@ fn get_section(yaml: &Vec<Yaml>, full: &Yaml) -> String {
         let title: String = doc["title"].as_str().unwrap().to_string();
         let section_type: String = doc["type"].as_str().unwrap().to_string();
         out.push_str(&format!("\\cvsection{{{}}}\n", escape_latex(&title)));
+        if doc["description"].as_str().is_some() {
+            out.push_str(&format!(
+                "{}\n",
+                escape_latex(&doc["description"].as_str().unwrap().to_string())
+            ));
+        }
         if section_type == "experiences" {
             out.push_str(&format!("{}", get_experiences(full)));
         }
         if section_type == "about" {
             out.push_str(&format!("{}", get_about(full)));
         }
-        // TODO: Skills, education, publications, hero, strengths, hobbies, certifications, projects
+        if section_type == "hero" {
+            out.push_str(&format!("{}", get_hero(full)));
+        }
+        if section_type == "skills" {
+            out.push_str(&format!("{}", get_skills(full)));
+        }
+        // TODO: education, publications, strengths, hobbies, certifications, projects
     });
     return out;
 }

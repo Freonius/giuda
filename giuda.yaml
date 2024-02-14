@@ -11,9 +11,14 @@ links:
   - link: Freonius
     type: github
 main_section:
+  - title: 'About'
+    type: about
   - title: 'Experience'
     type: experiences
 side_section:
+  - title: "Too long, didn't read"
+    type: hero
+    description: 'If the section on the left is too long, here is a fun thing.'
   - title: 'Skills'
     type: skills
 experiences:
@@ -30,13 +35,25 @@ experiences:
       - title: 'PHP'
         items:
           - 'Did this and that in PHP'
-about: []
-skills: []
+about: 'About me'
+skills:
+  - title: 'Italian'
+    level: 5
+  - skills:
+      - title: 'Python'
+        level: 5
+      - title: 'Rust'
+        level: 1
+  - title: 'Other'
+    level: 3
 role: null
 language: 'en'
 publications: []
 education: []
-hero: []
+hero:
+  - title: 'Docker'
+    description: 'I am gud at Docker.'
+    icon: 'Docker'
 strengths: []
 hobbies: []
 certifications: []
