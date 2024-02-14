@@ -176,6 +176,78 @@ fn get_skills(yaml: &Yaml) -> String {
     return out;
 }
 
+fn get_educations_or_certifications(yaml: &Yaml, key: &str) -> String {
+    let mut out: String = String::new();
+    yaml[key].as_vec().unwrap().iter().for_each(|doc: &Yaml| {
+        let doc: &Yaml = doc;
+        let institution: String = doc["institution"].as_str().unwrap().to_string();
+        let date: String = doc["date"].as_str().unwrap().to_string();
+        let title: String = doc["title"].as_str().unwrap().to_string();
+        let location: String = doc["location"].as_str().unwrap().to_string();
+
+        out.push_str(&format!(
+            "\\cvevent{{{}}}{{{}}}{{{}}}{{{}}}\n",
+            escape_latex(&title),
+            escape_latex(&institution),
+            escape_latex(&date),
+            escape_latex(&location)
+        ));
+        if doc["description"].as_str().is_some() {
+            out.push_str(&format!(
+                "{}\n",
+                escape_latex(&doc["description"].as_str().unwrap().to_string())
+            ));
+        }
+    });
+    return out;
+}
+
+fn get_publications(yaml: &Yaml) -> String {
+    let mut out: String = String::new();
+    let mut in_list: bool = false;
+    yaml["publications"]
+        .as_vec()
+        .unwrap()
+        .iter()
+        .for_each(|doc: &Yaml| {
+            let doc: &Yaml = doc;
+            if doc.as_str().is_some() {
+                if in_list == false {
+                    out.push_str("\\begin{itemize}\n");
+                    in_list = true;
+                }
+                out.push_str(&format!(
+                    "\\item {}\n",
+                    escape_latex(&doc.as_str().unwrap().to_string())
+                ));
+            } else {
+                if in_list == true {
+                    out.push_str("\\end{itemize}\n");
+                }
+                in_list = false;
+                let title: String = doc["title"].as_str().unwrap().to_string();
+                out.push_str(&format!("\\textbf{{{}}}\n\n\\begin{{itemize}}\n", title));
+                doc["publications"]
+                    .as_vec()
+                    .unwrap()
+                    .to_vec()
+                    .iter()
+                    .for_each(|item: &Yaml| {
+                        let item: &Yaml = item;
+                        out.push_str(&format!(
+                            "\\item {}\n",
+                            escape_latex(&item.as_str().unwrap().to_string())
+                        ));
+                    });
+                out.push_str("\\end{itemize}\n\n");
+            }
+        });
+    if in_list == true {
+        out.push_str("\\end{itemize}\n");
+    }
+    return out;
+}
+
 fn escape_latex(text: &String) -> String {
     return text
         .replace("\\", "\\\\")
@@ -208,7 +280,22 @@ fn get_section(yaml: &Vec<Yaml>, full: &Yaml) -> String {
         if section_type == "skills" {
             out.push_str(&format!("{}", get_skills(full)));
         }
-        // TODO: education, publications, strengths, hobbies, certifications, projects
+        if section_type == "education" {
+            out.push_str(&format!(
+                "{}",
+                get_educations_or_certifications(full, "education")
+            ))
+        }
+        if section_type == "certifications" {
+            out.push_str(&format!(
+                "{}",
+                get_educations_or_certifications(full, "certifications")
+            ))
+        }
+        if section_type == "publications" {
+            out.push_str(&format!("{}", get_publications(full)));
+        }
+        // TODO: strengths, hobbies, projects
     });
     return out;
 }
