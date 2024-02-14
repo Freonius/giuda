@@ -254,6 +254,15 @@ fn get_class() -> String {
 \NewInfoField{twitter}{\faTwitter}[https://twitter.com/]
 \NewInfoField{linkedin}{\faLinkedin}[https://linkedin.com/in/]
 \NewInfoField{github}{\faGithub}[https://github.com/]
+\NewInfoField{behance}{\faBehance}[https://www.behance.net/]
+\NewInfoField{dockerhub}{\faDocker}[https://hub.docker.com/u/]
+\NewInfoField{instagram}{\faInstagram}[https://www.instagram.com/]
+\NewInfoField{npm}{\faNpm}[https://www.npmjs.com/~]
+\NewInfoField{medium}{\faMedium}[https://medium.com/@]
+\NewInfoField{spotify}{\faSpotify}[https://open.spotify.com/user/]
+\NewInfoField{soundcloud}{\faSoundcloud}[https://soundcloud.com/]
+\NewInfoField{youtube}{\faYoutube}[https://youtube.com/@]
+\NewInfoField{blog}{\faBlog}[https://]
 \NewInfoField{orcid}{\aiOrcid}[https://orcid.org/]
 \NewInfoField{location}{\faMapMarker}
 
@@ -518,7 +527,7 @@ fn get_experiences(yaml: &Yaml) -> String {
             escape_latex(&location),
         ));
         experiences.push_str(&get_experience_items(doc["items"].as_vec().unwrap()));
-        experiences.push_str("\n\\divider\n\n");
+        experiences.push_str("\n\n\\divider\n\n");
     });
     experiences = experiences.trim_end_matches("\\divider\n\n").to_string();
     return experiences;
@@ -736,12 +745,12 @@ fn get_projects(yaml: &Yaml) -> String {
                 date = escape_latex(&doc["date"].as_str().unwrap().to_string());
             }
             let mut url: String = String::new();
-            if doc["url"].as_str().is_some() {
-                let addr: String = escape_latex(&doc["url"].as_str().unwrap().to_string());
+            if doc["link"].as_str().is_some() {
+                let addr: String = escape_latex(&doc["link"].as_str().unwrap().to_string());
                 url = format!("\\href{{{}}}{{{}}}\n\n", addr, addr);
             }
             out.push_str(&format!(
-                "\\cvevent{{{}}}{{{}}}{{{}}}{{}}\n{}{}\n\\divider\n",
+                "\\cvevent{{{}}}{{{}}}{{{}}}{{}}\n{}{}\n\n\\divider\n",
                 name, title, date, url, description
             ));
         });
@@ -753,7 +762,13 @@ fn escape_latex(text: &String) -> String {
     return text
         .replace("\\", "\\\\")
         .replace("&", "\\&")
-        .replace("#", "\\#");
+        .replace("#", "\\#")
+        .replace("%", "\\%")
+        .replace("$", "\\$")
+        .replace("[i]", "\\textit{")
+        .replace("[/i]", "}")
+        .replace("[b]", "\\textbf{")
+        .replace("[/b]", "}");
 }
 
 fn get_section(yaml: &Vec<Yaml>, full: &Yaml) -> String {
@@ -903,6 +918,18 @@ fn load_file(file: &str) -> String {
         "  \\phone{{\\href{{https://wa.me/{}}}{{{}}}}}\n",
         phone_wa, phone
     ));
+    yaml["links"]
+        .as_vec()
+        .unwrap()
+        .iter()
+        .for_each(|doc: &Yaml| {
+            let doc: &Yaml = doc;
+            out.push_str(&format!(
+                "\\{}{{{}}}\n",
+                escape_latex(&doc["type"].as_str().unwrap().to_string()),
+                escape_latex(&doc["link"].as_str().unwrap().to_string())
+            ))
+        });
     out.push_str(&format!(
         "  \\location{{{}}}\n",
         escape_latex(&yaml["location"].as_str().unwrap().to_string())

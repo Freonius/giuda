@@ -10,6 +10,10 @@ location: 'Piacenza, IT'
 links:
   - link: Freonius
     type: github
+  - link: federico-pirani
+    type: linkedin
+  - link: 'freonius'
+    type: behance
 main_section:
   - title: 'About'
     type: about
@@ -75,9 +79,9 @@ skills:
 role: null
 language: 'en'
 publications:
-  - 'Foreward to "Gli americani nella grande guerra", by Theodore Roosevelt Jr. (Liberty Bell, 2018)'
-  - Afterwards to "Noi del '49", by Luzena Stanley Wilson (Liberty Bell, 20XX)
-  - Foreward and afterwards to "Un Cowboy del Texas", by Charles Siringo. (Liberty Bell, 20XX)
+  - 'Foreward to [i]Gli americani nella grande guerra[/i], by Theodore Roosevelt Jr. (Liberty Bell, 2018)'
+  - Afterwards to [i]Noi del '49[/i], by Luzena Stanley Wilson (Liberty Bell, 20XX)
+  - Foreward and afterwards to [i]Un Cowboy del Texas[/i], by Charles Siringo. (Liberty Bell, 20XX)
   - title: 'Video'
     publications:
       - Short documentary about Woodrow Wilson's visit to Italy, "Woodrow Wilson in Italia" (2018)
@@ -95,9 +99,14 @@ education:
     date: '2023-present'
     location: 'Parma, IT'
 hero:
-  - title: 'Docker'
-    description: 'I am gud at Docker.'
-    icon: 'Docker'
+  - title: 'Python'
+    description: |
+      I use modern package managers (poetry mostly, but I also worked with pipenv),
+      always use type hinting, leverage many of Python's least used features (the dunder methods)
+    icon: 'Python'
+  - title: 'Automation and libraries'
+    description: I like to develop reusable libraries and bash scripts to speed up repetitive tasks
+    icon: 'Robot'
 strengths:
   - Automation
   - Curiosity
@@ -109,6 +118,10 @@ hobbies:
     icon: 'Music'
 certifications: []
 projects:
+  - name: 'Manuzio'
+    title: 'Book Publisher'
+    description: 'A pipeline for publishing books. Convert a docx document to epub and ready-for-print pdfs.'
+    date: '2024'
   - title: 'CV Generator'
     name: 'Giuda'
     description: 'A tool to generate CVs.'

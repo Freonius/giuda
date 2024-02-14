@@ -189,8 +189,10 @@
             "items": {
                 "type": "object",
                 "required": [
-                    "link"
+                    "link",
+                    "type"
                 ],
+                "additionalProperties": false,
                 "properties": {
                     "link": {
                         "type": "string"
@@ -202,10 +204,16 @@
                             "github",
                             "linkedin",
                             "twitter",
-                            "other",
+                            "homepage",
+                            "behance",
+                            "dockerhub",
+                            "instagram",
+                            "npm",
                             "medium",
-                            "stackoverflow",
-                            "behance"
+                            "spotify",
+                            "soundcloud",
+                            "youtube",
+                            "blog"
                         ]
                     }
                 }

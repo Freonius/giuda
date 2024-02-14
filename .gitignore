@@ -9,3 +9,4 @@ altacv.cls
 *.pdf
 *.synctex.gz
 *.xmpi
+!fred.pdf
