@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./giuda.schema.json
 
-name: Ciccio Pasticcio
+name: Federico Pirani
 image: null
 phone:
   number: 123-456-7890
@@ -13,14 +13,23 @@ links:
 main_section:
   - title: 'About'
     type: about
+  - type: publications
+    title: 'Publications'
   - title: 'Experience'
     type: experiences
+  - title: 'Personal Projects'
+    type: projects
 side_section:
   - title: "Too long, didn't read"
     type: hero
     description: 'If the section on the left is too long, here is a fun thing.'
   - title: 'Skills'
     type: skills
+  - title: 'Education'
+    type: education
+  - title: 'Hobbies'
+    type: hobbies
+
 experiences:
   - role: 'Software Engineer'
     company: ''
@@ -37,24 +46,70 @@ experiences:
           - 'Did this and that in PHP'
 about: 'About me'
 skills:
-  - title: 'Italian'
-    level: 5
   - skills:
       - title: 'Python'
         level: 5
+      - title: 'Bash'
+        level: 5
+      - title: 'SQL'
+        level: 4
+      - title: 'TypeScript'
+        level: 3
       - title: 'Rust'
         level: 1
-  - title: 'Other'
-    level: 3
+  - skills:
+      - title: 'Docker'
+        level: 5
+      - title: 'CI/CD'
+        level: 4
+      - title: 'Testing'
+        level: 4
+      - title: 'Git'
+        level: 3
+  - skills:
+      - title: 'Italian'
+        level: 5
+      - title: 'English'
+        level: 5
+
 role: null
 language: 'en'
-publications: []
-education: []
+publications:
+  - 'Foreward to "Gli americani nella grande guerra", by Theodore Roosevelt Jr. (Liberty Bell, 2018)'
+  - Afterwards to "Noi del '49", by Luzena Stanley Wilson (Liberty Bell, 20XX)
+  - Foreward and afterwards to "Un Cowboy del Texas", by Charles Siringo. (Liberty Bell, 20XX)
+  - title: 'Video'
+    publications:
+      - Short documentary about Woodrow Wilson's visit to Italy, "Woodrow Wilson in Italia" (2018)
+education:
+  - institution: 'Università Statale di Milano'
+    title: 'History'
+    date: '2009-interrupted'
+    location: 'Milano, IT'
+  - institution: 'University of the Arts London'
+    title: 'Advertisement Course'
+    date: '2013'
+    location: 'London, UK'
+  - institution: 'Università Statale di Parma'
+    title: 'Literature'
+    date: '2023-present'
+    location: 'Parma, IT'
 hero:
   - title: 'Docker'
     description: 'I am gud at Docker.'
     icon: 'Docker'
-strengths: []
-hobbies: []
+strengths:
+  - Automation
+  - Curiosity
+  - Creativity
+hobbies:
+  - name: 'History'
+    icon: 'FortAwesome'
+  - name: 'Musicals'
+    icon: 'Music'
 certifications: []
-projects: []
+projects:
+  - title: 'CV Generator'
+    name: 'Giuda'
+    description: 'A tool to generate CVs.'
+    link: https://github.com/Freonius/giuda

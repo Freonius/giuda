@@ -333,10 +333,14 @@
                 "additionalProperties": false,
                 "required": [
                     "title",
-                    "description"
+                    "description",
+                    "name"
                 ],
                 "properties": {
                     "title": {
+                        "type": "string"
+                    },
+                    "name": {
                         "type": "string"
                     },
                     "description": {
