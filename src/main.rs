@@ -8,7 +8,7 @@ use yaml_rust::YamlLoader;
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
-        println!("Usage: {} file.yaml", args[0]);
+        println!("Usage: {} file.yaml [output_file]", args[0]);
     } else {
         let file: &str = &args[1].as_str();
         let doc: String = load_file(file);
@@ -36,7 +36,7 @@ fn get_experience_items(items: &Vec<Yaml>) -> String {
         let item: &Yaml = item;
         if item.as_str().is_some() {
             if in_list == false {
-                out.push_str("\\begin{{itemize}}\n");
+                out.push_str("\\begin{itemize}\n");
                 in_list = true;
             }
             out.push_str(&format!(
@@ -187,8 +187,6 @@ fn load_file(file: &str) -> String {
 \renewcommand{\itemmarker}{{\small\textbullet}}
 \renewcommand{\ratingmarker}{\faCircle}
 
-\addbibresource{sample.bib}
-
 \usepackage{expl3,xparse}
 \usepackage{url}
 \usepackage{hyperref}
@@ -240,13 +238,13 @@ fn load_file(file: &str) -> String {
     ));
     // TODO: Links
     out.push_str("}%\n\n");
-    out.push_str("\\makecvheader\n\n\\columnratio{{0.6}}\n\n\\begin{{paracol}}{{2}}\n");
+    out.push_str("\\makecvheader\n\n\\columnratio{0.6}\n\n\\begin{paracol}{2}\n");
     let main_section: &Vec<Yaml> = yaml["main_section"].as_vec().unwrap();
     let side_section: &Vec<Yaml> = yaml["side_section"].as_vec().unwrap();
     out.push_str(&format!("{}", get_section(&main_section, &yaml)));
     out.push_str(&format!("\\switchcolumn\n\n"));
     out.push_str(&format!("{}", get_section(&side_section, &yaml)));
-    out.push_str("\n\\end{{paracol}}\n\\end{{document}}");
+    out.push_str("\n\\end{paracol}\n\\end{document}");
 
     return out;
 }
