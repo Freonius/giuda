@@ -1,0 +1,477 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Giuda: CV as Code",
+    "definitions": {
+        "experienceGroup": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "title",
+                "items"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "experience": {
+            "type": "object",
+            "required": [
+                "role",
+                "company",
+                "date",
+                "location",
+                "items"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "role": {
+                    "type": "string"
+                },
+                "company": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/experienceGroup"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "experiences": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/experience"
+            }
+        },
+        "skill": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "title",
+                "level"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "integer",
+                    "maximum": 5,
+                    "minimum": 1
+                }
+            }
+        },
+        "skillGroup": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "skills"
+            ],
+            "properties": {
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/skill"
+                    }
+                }
+            }
+        },
+        "skills": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/skill"
+                    },
+                    {
+                        "$ref": "#/definitions/skillGroup"
+                    }
+                ]
+            }
+        },
+        "publicationGroup": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "title",
+                "publications"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "publications": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "publications": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/publicationGroup"
+                    },
+                    {
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "phone": {
+            "type": "object",
+            "required": [
+                "number",
+                "prefix"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "number": {
+                    "type": "string"
+                },
+                "prefix": {
+                    "type": "integer"
+                }
+            }
+        },
+        "links": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "link"
+                ],
+                "properties": {
+                    "link": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string",
+                        "default": "other",
+                        "enum": [
+                            "github",
+                            "linkedin",
+                            "twitter",
+                            "other",
+                            "medium",
+                            "stackoverflow",
+                            "behance"
+                        ]
+                    }
+                }
+            }
+        },
+        "education": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "institution",
+                "date",
+                "location",
+                "title"
+            ],
+            "properties": {
+                "institution": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "educations": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/education"
+            }
+        },
+        "customSection": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "title",
+                "description"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "heroContent": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "title",
+                "description",
+                "icon"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                }
+            }
+        },
+        "heroSection": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/heroContent"
+            }
+        },
+        "sectionOrder": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "title",
+                    "type"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "experiences",
+                            "skills",
+                            "publications",
+                            "education",
+                            "hero",
+                            "strengths",
+                            "hobbies",
+                            "about",
+                            "certifications",
+                            "projects"
+                        ]
+                    }
+                }
+            }
+        },
+        "projects": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "title",
+                    "description"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "link": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "date": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "name",
+        "language",
+        "image",
+        "role",
+        "location",
+        "email",
+        "phone",
+        "links",
+        "experiences",
+        "skills",
+        "publications",
+        "education",
+        "hero",
+        "strengths",
+        "hobbies",
+        "about",
+        "certifications",
+        "projects",
+        "main_section",
+        "side_section"
+    ],
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "language": {
+            "type": "string"
+        },
+        "image": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "role": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "location": {
+            "type": "string"
+        },
+        "email": {
+            "type": "string",
+            "format": "email"
+        },
+        "phone": {
+            "$ref": "#/definitions/phone"
+        },
+        "links": {
+            "$ref": "#/definitions/links"
+        },
+        "experiences": {
+            "$ref": "#/definitions/experiences"
+        },
+        "skills": {
+            "$ref": "#/definitions/skills"
+        },
+        "publications": {
+            "$ref": "#/definitions/publications"
+        },
+        "education": {
+            "$ref": "#/definitions/educations"
+        },
+        "hero": {
+            "$ref": "#/definitions/heroSection"
+        },
+        "strengths": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "hobbies": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "name",
+                            "icon"
+                        ],
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "icon": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "about": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ]
+        },
+        "main_section": {
+            "$ref": "#/definitions/sectionOrder"
+        },
+        "side_section": {
+            "$ref": "#/definitions/sectionOrder"
+        },
+        "certifications": {
+            "$ref": "#/definitions/educations"
+        },
+        "projects": {
+            "$ref": "#/definitions/projects"
+        }
+    }
+}
