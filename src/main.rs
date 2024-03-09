@@ -2,6 +2,8 @@ use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::MAIN_SEPARATOR;
+use std::process::Command;
+use std::time::{Duration, Instant};
 use yaml_rust::yaml::Yaml;
 use yaml_rust::YamlLoader;
 
@@ -17,7 +19,7 @@ fn main() {
             if let Ok(cwd) = env::current_dir() {
                 my_cwd = cwd.to_str().unwrap().to_string();
             }
-            let mut out_file =
+            let mut out_file: File =
                 File::create(&format!("{}{}{}.tex", my_cwd, MAIN_SEPARATOR, args[2]))
                     .expect("Unable to create file");
             out_file
@@ -29,6 +31,9 @@ fn main() {
             out_class
                 .write_all(get_class().as_bytes())
                 .expect("Unable to write data");
+            if args.len() == 4 && args[3] == "--compile" {
+                compile_latex(format!("{}.tex", args[2]).to_string(), my_cwd);
+            }
         } else {
             println!("{}", doc);
         }
@@ -972,4 +977,18 @@ fn load_file(file: &str) -> String {
     out.push_str("\n\\end{paracol}\n\\end{document}");
 
     return out;
+}
+
+fn compile_latex(file: String, folder: String) {
+    let start: Instant = Instant::now();
+    Command::new("lualatex")
+        .arg(&format!("--include-directory={}", folder))
+        .arg(&format!("--output-directory={}", folder))
+        .arg("--interaction=nonstopmode")
+        .arg("--enable-installer")
+        .arg(file)
+        .output()
+        .expect("Failed to execute command");
+    let duration: Duration = start.elapsed();
+    println!("Compiled in {} seconds", duration.as_secs_f32());
 }
