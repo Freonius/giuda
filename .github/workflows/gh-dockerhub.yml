@@ -1,9 +1,11 @@
-# .github/workflows/release.yml
+name: Push to Dockerhub
 
 on:
   push:
     branches:
       - master
+      - main
+  workflow_dispatch:
 
 jobs:
   release:
