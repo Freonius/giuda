@@ -527,7 +527,14 @@ fn get_experiences(yaml: &Yaml) -> String {
             escape_latex(&location),
         ));
         experiences.push_str(&get_experience_items(doc["items"].as_vec().unwrap()));
-        experiences.push_str("\n\n\\divider\n\n");
+        if doc["break_after"]
+            .as_bool()
+            .is_some_and(|break_after: bool| break_after == true)
+        {
+            experiences.push_str("\\newpage\n\n");
+        } else {
+            experiences.push_str("\n\n\\divider\n\n");
+        }
     });
     experiences = experiences.trim_end_matches("\\divider\n\n").to_string();
     return experiences;
@@ -820,6 +827,12 @@ fn get_section(yaml: &Vec<Yaml>, full: &Yaml) -> String {
         if section_type == "projects" {
             out.push_str(&format!("{}", get_projects(full)));
         }
+        if doc["break_after"]
+            .as_bool()
+            .is_some_and(|break_after: bool| break_after == true)
+        {
+            out.push_str("\\newpage\n\n");
+        }
     });
     return out;
 }
@@ -934,14 +947,28 @@ fn load_file(file: &str) -> String {
         "  \\location{{{}}}\n",
         escape_latex(&yaml["location"].as_str().unwrap().to_string())
     ));
-    // TODO: Links
     out.push_str("}%\n\n");
-    out.push_str("\\makecvheader\n\n\\columnratio{0.6}\n\n\\begin{paracol}{2}\n");
+    let side_is_left: bool = yaml["side_is_left"]
+        .as_bool()
+        .is_some_and(|is_left: bool| is_left);
+    if side_is_left {
+        out.push_str("\\makecvheader\n\n\\columnratio{0.4}\n\n\\begin{paracol}{2}\n");
+    } else {
+        out.push_str("\\makecvheader\n\n\\columnratio{0.6}\n\n\\begin{paracol}{2}\n");
+    }
     let main_section: &Vec<Yaml> = yaml["main_section"].as_vec().unwrap();
     let side_section: &Vec<Yaml> = yaml["side_section"].as_vec().unwrap();
-    out.push_str(&format!("{}", get_section(&main_section, &yaml)));
+    if side_is_left {
+        out.push_str(&format!("{}", get_section(&side_section, &yaml)));
+    } else {
+        out.push_str(&format!("{}", get_section(&main_section, &yaml)));
+    }
     out.push_str(&format!("\\switchcolumn\n\n"));
-    out.push_str(&format!("{}", get_section(&side_section, &yaml)));
+    if side_is_left {
+        out.push_str(&format!("{}", get_section(&main_section, &yaml)));
+    } else {
+        out.push_str(&format!("{}", get_section(&side_section, &yaml)));
+    }
     out.push_str("\n\\end{paracol}\n\\end{document}");
 
     return out;

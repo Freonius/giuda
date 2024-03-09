@@ -69,6 +69,10 @@
                             }
                         ]
                     }
+                },
+                "break_after": {
+                    "type": "boolean",
+                    "default": false
                 }
             }
         },
@@ -330,6 +334,10 @@
                             "certifications",
                             "projects"
                         ]
+                    },
+                    "break_after": {
+                        "type": "boolean",
+                        "default": false
                     }
                 }
             }
@@ -496,6 +504,10 @@
         },
         "projects": {
             "$ref": "#/definitions/projects"
+        },
+        "side_is_left": {
+            "type": "boolean",
+            "default": false
         }
     }
 }
