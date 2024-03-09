@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  builder:
+    image: freonius/giuda
+    volumes:
+      - .:/app
+    command: fred.yaml output --compile

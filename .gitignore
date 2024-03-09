@@ -9,4 +9,11 @@ altacv.cls
 *.pdf
 *.synctex.gz
 *.xmpi
+*.jpg
+*.png
+*.yaml
+*.yml
+!giuda.yaml
+!docker-compose.yml
+!Yacht_High.png
 !fred.pdf
